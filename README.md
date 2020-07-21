@@ -3,9 +3,9 @@ Backend created for the Delilah Delivery web page.
 - Actions allowed: users creation (admin or user), order new plates, change the status and details from an order.
 - Code: NodeJs, SQL, Swagger, Javascript, Sequelize.
 
-- This Readme was created to explain how to install the backend project in any enviroment.
+- This Readme was created to explain how to install the backend project in any enviroment:
 
-Spanish version:
+## Installation and Config (Spanish version)
 #### ¿Cómo instalar la base de datos? - Pasos a seguir
 - NodeJS ingresand
 - Descargam
