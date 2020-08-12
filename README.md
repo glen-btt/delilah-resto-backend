@@ -7,7 +7,7 @@ Backend created for the Delilah Delivery web page.
 
 ## Installation and Config (Spanish version)
 #### ¿Cómo instalar la base de datos? - Pasos a seguir
-- NodeJS ingresand
+- NodeJS
 - Descargam
 
 
