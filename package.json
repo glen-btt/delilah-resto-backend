@@ -1,0 +1,17 @@
+{
+  "name": "delilah-project",
+  "version": "1.0.0",
+  "description": "backend project",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "sequelize": "^6.3.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
