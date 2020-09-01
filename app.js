@@ -1,4 +1,4 @@
-const express = require ("express"); //llamamos a express del package json
+const express = require ("express"); //llamamos a express del package json, para crear el servidor y realizar llamadas HTTP.
 const bodyParser = require("body-parser");
 const jwt = require('jsonwebtoken'); //para proteger las rutas del proyecto
 const server = express(); //crea una variable para express llamada server
