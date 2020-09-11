@@ -1,6 +1,6 @@
 //MODULOS DE ROLES DE USUARIOS
 
-const Sequelize = require("Sequelize");
+const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize("delilah-acamica","root","",{
     host:"localhost",
@@ -15,20 +15,37 @@ sequelize.authenticate()
 })
 .catch(err => {
   console.log('Error: No se conecto a la base de datos')
+});
+
+
+//DESCRIPCION DE LA TABLA DE ROLES  
+const roles = sequelize.define('roles', {
+  id: {type: Sequelize.SMALLINT, primaryKey: true},
+  name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {notEmpty: true,}
+  },
 })
 
-//DESCRIPCION DE LA TABLA
 
 
+//FUNCIONES A EXPORTAR: obtener todos los roles, obtener por ID.
+function obtenerTodosLosRoles() {
+  return roles.findAll()
+}
 
-//FUNCIONES A EXPORTAR: obtener todos los platos, obtener por ID, actualizar, borrar, agregar
+function obtenerPorId(idRole) {
+  return roles.findOne({
+      where: {
+          id: idRole
+      }
+  }
+  )
+}
 
+//EXPORTACION A APP.JS
 
-
-
-
-
-
-module.exports =  {getAllOrders, getById, addOrder, deleteOrder, updateOrder, orders};
-  
+module.exports =  {obtenerTodosLosRoles, obtenerPorId, roles};
 
