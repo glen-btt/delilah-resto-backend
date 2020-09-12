@@ -17,7 +17,7 @@ sequelize.authenticate()
 });
 
 
-//DESCRIPCION DE LA TABLA
+//DESCRIPCION DE LA TABLA (revisar si esta todo ok en php)
 const usuarios = sequelize.define('usuarios', {
   id: {type: Sequelize.SMALLINT, primaryKey: true},
   nick_name: {

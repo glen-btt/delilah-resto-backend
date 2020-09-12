@@ -25,7 +25,7 @@ const ordenes = sequelize.define('ordenes', {
   payment: {type: Sequelize.STRING},
   status: {type: Sequelize.STRING},    
   price: {type: Sequelize.REAL},
-  adress_user: {
+  address_user: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {notEmpty: true,}

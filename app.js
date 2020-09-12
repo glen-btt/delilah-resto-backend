@@ -8,22 +8,30 @@ const server = express(); //crea una variable para express llamada server
 
 
 
-//server.listen(3000,()=>{
-//    console.log("Servidor iniciado!");
-//});
+server.listen(3000,()=>{
+    console.log("Servidor iniciado!");
+});
+
+//Principal Endpoint
+server.get("/",(req,res)=>{
+    res.send("Bienvenido a Delilah Delivery");
+});
 
 
+// PARA CODIFICAR Y PROTEGER LAS RUTAS + body parser
+const config = require('./modulos/config') //llamada a la llave
 
+server.set('llave', config.llave);
 
-//BodyParser - Función codificar la URL
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({extended:true})); 
+server.use(bodyParser.urlencoded({extended: true})) //BodyParser para codificar la URL
+server.use(bodyParser.json())
+
 
 
 //Sección roles + token para los usuarios admin (usar jsonwebtoken)
 const usuarios = require("./modulos/usuarios.js");
 
-server.post('/api/usarios/add', function (request, response) {
+server.post('/api/usuarios/add', function (request, response) {
 
     return usuarios.agregarUsuario(request)
     .then(function (usuarios) {
@@ -60,6 +68,7 @@ server.post('/api/autenticar', (request, response) => {
     })
 })
 
+//Se crea la variable para proteger las rutas con JWT
 const rutasProtegidas = express.Router();
 
 rutasProtegidas.use((req, res, next) => {
@@ -79,14 +88,14 @@ rutasProtegidas.use((req, res, next) => {
           mensaje: 'Token no proveída.' 
       });
     }
- });
+});
 
 
 
 //ENDPOINT ROLES
 const roles = require("./modulos/roles.js");
 
-server.get('/api/modulos/roles/obtenerTodos', rutasProtegidas, (request, response) => {
+server.get('/api/roles/obtenerTodos', rutasProtegidas, (request, response) => {
     return roles.obtenerTodosLosRoles()
     .then(function (roles) {
         if (roles) {
@@ -98,7 +107,7 @@ server.get('/api/modulos/roles/obtenerTodos', rutasProtegidas, (request, respons
     });
 })
 
-server.get('/api/modulos/roles/obtenerPorId/:id', rutasProtegidas, (request, response)=>{
+server.get('/api/roles/obtenerPorId/:id', rutasProtegidas, (request, response)=>{
     return roles.obtenerPorId(request.params.id)
     .then(function (roles) {
         if (roles) {
@@ -115,7 +124,7 @@ server.get('/api/modulos/roles/obtenerPorId/:id', rutasProtegidas, (request, res
 server.put('/api/usuarios/update/:nickName', rutasProtegidas, function (request, response) {
 
     if (request.body.requestedBy == request.params.nickName){
-        return usuarios.updateUser(request)
+        return usuarios.actualizarUsuario(request)
         .then(function (usuarios) {
             if (usuarios) {
                 response.status(200).send('El usuario ' + request.params.nickName + ' ha sido actualizado con éxito')
@@ -130,9 +139,9 @@ server.put('/api/usuarios/update/:nickName', rutasProtegidas, function (request,
 });
 
 
-server.get('/api/usuarios/getByNickName', rutasProtegidas, (request, response)=>{
+server.get('/api/usuarios/getByNickname', rutasProtegidas, (request, response)=>{
 if (request.body.requestedBy == request.body.nickName){
-    return usuarios.getByNickName(request.body.nickName)
+    return usuarios.obtenerPorNickname(request.body.nickName)
     .then(function (usuarios) {
         if (users) {
             response.send(usuarios);
@@ -162,32 +171,26 @@ server.get('/api/modulos/platos/obtenerPlatos', (request, response) => {
 })
 
 
-
-
-
-
-
 //ENDPOINT DE ORDENES
 const ordenes = require("./modulos/ordenes.js");
-const ordenar_platos = require("./modulos/ordenar_platos.js"); //tabla intermedia de cantidades
+const ordenar_platos = require("./modulos/ordenar-platos.js"); //tabla intermedia de cantidades
 
 //ojo con esta seccion revisar!!
 server.post('/api/order/add', rutasProtegidas, function (request, response) {
     return ordenes.addOrder(request)
-    .then(function (orders) {
+    .then(function (ordenes) {
         if (ordenes) {
             request.body.platos.forEach(element => {
                 return platos.obtenerPorId(element.id_dish)  
                 .then(function(platos){
                     if (platos){                                 
-                        return ordenar_platos.agregarOrdenPorId(element, ordnes.toJSON().id)
+                        return ordenar_platos.agregarOrdenPorId(element, ordenes.toJSON().id)
                         .then(function(ordenar_platos){
                             response.send(ordenes);
                         })                                                          
                     }else{
                         response.status(400).send('No existe un plato con ese id' + element.id_dish);
                     }
-                    
                 });   
             });
         
@@ -302,7 +305,3 @@ server.get('/api/order/getById/:id', rutasProtegidas, (request, response)=>{
 
 
 
-//Principal Endpoint
-server.get("/",(req,res)=>{
-    res.send("Bienvenido a Delilah Delivery");
-});
