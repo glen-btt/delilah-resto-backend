@@ -6,10 +6,10 @@ const bodyParser = require("body-parser");
 const jwt = require('jsonwebtoken'); //para proteger las rutas del proyecto
 const server = express(); //crea una variable para express llamada server
 
+const port = process.env.PORT || 3000
 
-
-server.listen(3000,()=>{
-    console.log("Servidor iniciado!");
+server.listen(port,()=>{
+    console.log("API REST corriendo en http://localhost:${port}")
 });
 
 //Principal Endpoint
@@ -19,13 +19,12 @@ server.get("/",(req,res)=>{
 
 
 // PARA CODIFICAR Y PROTEGER LAS RUTAS + body parser
-const config = require('./modulos/config') //llamada a la llave
+const config = require('./modulos/config.js') //llamada a la llave
 
 server.set('llave', config.llave);
 
 server.use(bodyParser.urlencoded({extended: true})) //BodyParser para codificar la URL
 server.use(bodyParser.json())
-
 
 
 //Sección roles + token para los usuarios admin (usar jsonwebtoken)
@@ -44,29 +43,31 @@ server.post('/api/usuarios/add', function (request, response) {
     .catch(err=>response.status(400).send(err.parent.sqlMessage));        
 });
 
+
 server.post('/api/autenticar', (request, response) => {
-    return usuarios.obtenerPorNickname(request.body.user)
-    .then(function (usuarios) {
-        if (usuarios){
-            if (usuarios.toJSON().password==request.body.password){
-                const payload = {
-                check:  true
-                };
-                const token = jwt.sign(payload, app.get('llave'), {
-                expiresIn: 1440
-                });
-                response.json({
-                mensaje: 'Autenticación correcta',
-                token: token
-                });
+    return usuarios.obtenerPorNickname(request.body.nickName)
+        .then(function (usuarios) {
+            if (usuarios) {
+                if (usuarios.toJSON().password== request.body.password) {
+                    const payload = {
+                        check: true
+                    };
+                    const token = jwt.sign(payload, server.get('llave'), {
+                        expiresIn: 1440
+                    });
+                    response.json({
+                        mensaje: 'Autenticación correcta',
+                        token: token
+                    });
+                } else {
+                    response.json({ mensaje: "Contraseña incorrecta" });
+                }
             } else {
-                response.json({ mensaje: "Contraseña incorrecta"})
+                response.json({ mensaje: "Usuario inexistente" });
             }
-        }else{
-            response.json({ mensaje: "Usuario inexistente"})
-        }
-    })
+        });
 })
+
 
 //Se crea la variable para proteger las rutas con JWT
 const rutasProtegidas = express.Router();
@@ -75,7 +76,7 @@ rutasProtegidas.use((req, res, next) => {
     const token = req.headers['access-token'];
  
     if (token) {
-      jwt.verify(token, app.get('llave'), (err, decoded) => {      
+      jwt.verify(token, server.get('llave'), (err, decoded) => {      
         if (err) {
           return res.json({ mensaje: 'Token inválida' });    
         } else {
@@ -92,15 +93,16 @@ rutasProtegidas.use((req, res, next) => {
 
 
 
+
+
 //ENDPOINT ROLES
 const roles = require("./modulos/roles.js");
 
-server.get('/api/roles/obtenerTodos', rutasProtegidas, (request, response) => {
+server.get('/api/roles/obtenerTodos', rutasProtegidas, (request, response) => { 
     return roles.obtenerTodosLosRoles()
     .then(function (roles) {
         if (roles) {
             response.send(roles);
-            
         } else {
             response.status(400).send('Error');
         }
@@ -143,7 +145,7 @@ server.get('/api/usuarios/getByNickname', rutasProtegidas, (request, response)=>
 if (request.body.requestedBy == request.body.nickName){
     return usuarios.obtenerPorNickname(request.body.nickName)
     .then(function (usuarios) {
-        if (users) {
+        if (usuarios) {
             response.send(usuarios);
         } else {
             response.status(400).send('No existe el Nickname ingresado');
@@ -172,20 +174,23 @@ server.get('/api/modulos/platos/obtenerPlatos', (request, response) => {
 
 
 //ENDPOINT DE ORDENES
-const ordenes = require("./modulos/ordenes.js");
-const ordenar_platos = require("./modulos/ordenar-platos.js"); //tabla intermedia de cantidades
 
-//ojo con esta seccion revisar!!
+const ordenes = require("./modulos/ordenes.js");
+const ordenes_platos = require("./modulos/ordenes_platos.js"); //tabla intermedia de cantidades
+
+//ojo con esta seccion revisar los nombres!!
+
+//sección para agregar un pedido
 server.post('/api/order/add', rutasProtegidas, function (request, response) {
-    return ordenes.addOrder(request)
+    return ordenes.agregarOrden(request)
     .then(function (ordenes) {
         if (ordenes) {
             request.body.platos.forEach(element => {
                 return platos.obtenerPorId(element.id_dish)  
                 .then(function(platos){
                     if (platos){                                 
-                        return ordenar_platos.agregarOrdenPorId(element, ordenes.toJSON().id)
-                        .then(function(ordenar_platos){
+                        return ordenes_platos.agregarOrdenPorId(element, ordenes.toJSON().id)
+                        .then(function(ordenes){
                             response.send(ordenes);
                         })                                                          
                     }else{
@@ -203,7 +208,7 @@ server.post('/api/order/add', rutasProtegidas, function (request, response) {
 });
 
 server.put('/api/order/update', rutasProtegidas, function (request, response) {
-    return usuarios.obtenerPorNickName(request.body.requestedBy)
+    return usuarios.obtenerPorNickname(request.body.requestedBy)
     .then(function (usuarios) {
         if (usuarios){
             if (usuarios.toJSON().role==1){
@@ -226,14 +231,14 @@ server.put('/api/order/update', rutasProtegidas, function (request, response) {
         
 });
 
-
+//borrar orden
 server.delete('/api/order/delete', rutasProtegidas, function (request, response) {
     return usuarios.obtenerPorNickname(request.body.requestedBy)
     .then(function (usuarios) {
         if (usuarios){
             if (usuarios.toJSON().role==1){
-                return ordenar_platos.borrarOrdenPorId(request.body.id)
-                .then(function(ordenar_platos){
+                return ordenes_platos.borrarOrdenPorId(request.body.id)
+                .then(function(ordenes_platos){
                     return ordenes.borrarOrden(request)
                     .then(function (ordenes) {
                         if (ordenes) {

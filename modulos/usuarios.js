@@ -50,7 +50,7 @@ function agregarUsuario(request) {
       phone: request.body.phone,
       address: request.body.address,
       password: request.body.password,
-      role: request.body.role,
+      role: request.body.role
   })
 }
 

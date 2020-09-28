@@ -61,7 +61,7 @@ function agregarOrden(request) {
       payment: request.body.payment,
       status: request.body.status,
       price: request.body.price,
-      adress_user: request.body.adress_user,
+      address_user: request.body.address_user,
       phone_user: request.body.phone_user,
       comments: request.body.comments,
   })
