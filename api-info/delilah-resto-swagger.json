@@ -1,0 +1,785 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0",
+      "title": "Delilah Resto Backend",
+      "contact": {}
+    },
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/usuarios/add": {
+        "post": {
+          "summary": "Agregar usuarios",
+          "tags": [
+            "User"
+          ],
+          "operationId": "Add",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": ""
+            },
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/AddRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/user/update/admin": {
+        "put": {
+          "summary": "Update",
+          "tags": [
+            "User"
+          ],
+          "operationId": "Update",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "access-token",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": ""
+            },
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/UpdateRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/user/getByNickName": {
+        "get": {
+          "summary": "Obtener el detalle de usuario por Nickname",
+          "tags": [
+            "User"
+          ],
+          "operationId": "GetByNickName",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "access-token",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": ""
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/role/obtenerTodos": {
+        "get": {
+          "summary": "Obtener todos los roles de usuarios.",
+          "tags": [
+            "Role"
+          ],
+          "operationId": "Obtener todos",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/roles/obtenerPorID/:id": {
+        "get": {
+          "summary": "Obtener roles por ID",
+          "tags": [
+            "Role"
+          ],
+          "operationId": "GetById",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "modulos/platos/obtenerPlatos": {
+        "get": {
+          "summary": "Obtener todos los platos",
+          "tags": [
+            "Dish"
+          ],
+          "operationId": "GetAll1",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/order/getAll": {
+        "get": {
+          "summary": "GetAll",
+          "tags": [
+            "Order"
+          ],
+          "operationId": "GetAll12",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "access-token",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": ""
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/order/add": {
+        "post": {
+          "description": "El formato de fecha debera ser dd-mm-YYYY",
+          "summary": "Add",
+          "tags": [
+            "Order"
+          ],
+          "operationId": "PostAdd1",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "access-token",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": ""
+            },
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/AddRequest2"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/order/update": {
+        "put": {
+          "summary": "Update",
+          "tags": [
+            "Order"
+          ],
+          "operationId": "PutUpdate1",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "access-token",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": ""
+            },
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/UpdateRequest2"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/order/delete": {
+        "delete": {
+          "summary": "Delete",
+          "tags": [
+            "Order"
+          ],
+          "operationId": "Delete1",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "access-token",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": ""
+            },
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/DeleteRequest1"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/order/getById/1": {
+        "get": {
+          "summary": "obtener ordenes por ID",
+          "tags": [
+            "Order"
+          ],
+          "operationId": "GetById12",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      },
+      "/autenticar": {
+        "post": {
+          "summary": "Para autenticar usuario y obtener el access-token",
+          "tags": [
+            "Misc"
+          ],
+          "operationId": "Autenticar",
+          "deprecated": false,
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "Body",
+              "in": "body",
+              "required": true,
+              "description": "",
+              "schema": {
+                "$ref": "#/definitions/AutenticarRequest"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {}
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "AddRequest": {
+        "title": "AddRequest",
+        "example": {
+          "nickName": "string",
+          "name": "string",
+          "lastName": "string",
+          "email": "string",
+          "phone": "string",
+          "address": "string",
+          "password": "string",
+          "role": 1
+        },
+        "type": "object",
+        "properties": {
+          "nickName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "nickName",
+          "name",
+          "lastName",
+          "email",
+          "phone",
+          "address",
+          "password",
+          "role"
+        ]
+      },
+      "UpdateRequest": {
+        "title": "UpdateRequest",
+        "example": {
+          "name": "string",
+          "lastName": "string",
+          "email": "string",
+          "phone": "string",
+          "address": "string",
+          "password": "string",
+          "role": 1,
+          "requestedBy": "mariana"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requestedBy": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "lastName",
+          "email",
+          "phone",
+          "address",
+          "password",
+          "role",
+          "requestedBy"
+        ]
+      },
+      "AddRequest1": {
+        "title": "AddRequest1",
+        "example": {
+          "name": "sushi",
+          "category": "pescados",
+          "description": "sushi varios",
+          "price": 900,
+          "requestedBy": "mariana"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requestedBy": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "category",
+          "description",
+          "price",
+          "requestedBy"
+        ]
+      },
+      "UpdateRequest1": {
+        "title": "UpdateRequest1",
+        "example": {
+          "name": "string",
+          "category": "string",
+          "description": "string",
+          "price": 0,
+          "requestedBy": "mariana"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requestedBy": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "category",
+          "description",
+          "price",
+          "requestedBy"
+        ]
+      },
+      "DeleteRequest": {
+        "title": "DeleteRequest",
+        "example": {
+          "requestedBy": "admin"
+        },
+        "type": "object",
+        "properties": {
+          "requestedBy": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "requestedBy"
+        ]
+      },
+      "UpdateCopyRequest": {
+        "title": "UpdateCopyRequest",
+        "example": {
+          "name": "string",
+          "category": "string",
+          "description": "string",
+          "price": 0,
+          "requestedBy": "mariana"
+        },
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "requestedBy": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "category",
+          "description",
+          "price",
+          "requestedBy"
+        ]
+      },
+      "AddRequest2": {
+        "title": "AddRequest2",
+        "example": {
+          "id_user": 7,
+          "date": "15-05-2020",
+          "payment": "string",
+          "status": "string",
+          "price": 1,
+          "adress_user": "string",
+          "phone_user": "string",
+          "comments": "string",
+          "dishes": [
+            {
+              "id_dish": 1,
+              "cant_dish": 2,
+              "price_dish": 3
+            },
+            {
+              "id_dish": 2,
+              "cant_dish": 1,
+              "price_dish": 10
+            }
+          ]
+        },
+        "type": "object",
+        "properties": {
+          "id_user": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string"
+          },
+          "payment": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "address_user": {
+            "type": "string"
+          },
+          "phone_user": {
+            "type": "string"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "dishes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Dish"
+            }
+          }
+        },
+        "required": [
+          "id_user",
+          "date",
+          "payment",
+          "status",
+          "price",
+          "address_user",
+          "phone_user",
+          "comments",
+          "dishes"
+        ]
+      },
+      "Dish": {
+        "title": "Dish",
+        "example": {
+          "id_dish": 1,
+          "cant_dish": 2,
+          "price_dish": 3
+        },
+        "type": "object",
+        "properties": {
+          "id_dish": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "cant_dish": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "price_dish": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "id_dish",
+          "cant_dish",
+          "price_dish"
+        ]
+      },
+      "UpdateRequest2": {
+        "title": "UpdateRequest2",
+        "example": {
+          "id": "1",
+          "status": "string",
+          "requestedBy": "string5"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "requestedBy": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "requestedBy"
+        ]
+      },
+      "DeleteRequest1": {
+        "title": "DeleteRequest1",
+        "example": {
+          "id": "120",
+          "requestedBy": "admin"
+        },
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "requestedBy": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "requestedBy"
+        ]
+      },
+      "AutenticarRequest": {
+        "title": "AutenticarRequest",
+        "example": {
+          "user": "santiago_alvarez",
+          "password": "string"
+        },
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "user",
+          "password"
+        ]
+      }
+    },
+    "tags": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Role"
+      },
+      {
+        "name": "Dish"
+      },
+      {
+        "name": "Order"
+      },
+      {
+        "name": "Misc",
+        "description": ""
+      }
+    ]
+  }
