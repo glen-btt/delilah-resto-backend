@@ -201,13 +201,13 @@ ALTER TABLE `usuarios`
 --
 
 --
--- Filtros para la tabla `orders`
+-- Filtros para la tabla `ordenes`
 --
 ALTER TABLE `ordenes`
   ADD CONSTRAINT `ordenes_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`);
 
 --
--- Filtros para la tabla `users`
+-- Filtros para la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`role`) REFERENCES `roles` (`id`);
