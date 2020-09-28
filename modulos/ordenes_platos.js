@@ -1,7 +1,7 @@
 //MODULOS DE GESTION DE ORDENES DE PLATOS - TABLA INTERMEDIA
 const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize("delilah-acamica","root","",{
+const sequelize = new Sequelize("delilah-acamica","desarrollo","desarrollo",{
     host:"localhost",
     dialect: "mysql",
 }) //nombre de base, username, password (que luego hay que esconder)
