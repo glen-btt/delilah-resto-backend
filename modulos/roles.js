@@ -2,7 +2,7 @@
 
 const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize("delilah-acamica","root","",{
+const sequelize = new Sequelize("delilah-acamica","desarrollo","desarrollo",{
     host:"localhost",
     dialect: "mysql",
 }) //contiene 1-nombre de base, 2-username, 3-password 
