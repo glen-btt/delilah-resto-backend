@@ -136,11 +136,12 @@ server.put('/api/usuarios/update/:nickName', rutasProtegidas, function (request,
         })    
         .catch(err=>response.status(400).send(err.parent.sqlMessage)); 
         }else{
-            response.status(400).send('No tiene permisos para actualizar el ususario');
+            response.status(400).send('No tiene permisos para actualizar el usuario');
         }
 });
 
 
+//CONSULTA DE USUARIOS
 server.get('/api/usuarios/getByNickname', rutasProtegidas, (request, response)=>{
 if (request.body.requestedBy == request.body.nickName){
     return usuarios.obtenerPorNickname(request.body.nickName)
@@ -152,15 +153,47 @@ if (request.body.requestedBy == request.body.nickName){
         }
     });
 }else{
-    response.status(400).send('No tiene permisos para consultar el ususario');
+    response.status(400).send('No tiene permisos para consultar el usuario');
 }
+})
+
+server.get('/api/usuarios/getAll', rutasProtegidas, (request, response)=>{
+    if (request.body.requestedBy == request.body.nickName){
+        return usuarios.obtenerPorNickname(request.body.nickName)
+        .then(function (usuarios) {
+            if (usuarios) {
+                response.send(usuarios);
+            } else {
+                response.status(400).send('No existe el Nickname ingresado');
+            }
+        });
+    }else{
+        response.status(400).send('No tiene permisos para consultar el usuario');
+    }
+    })
+
+
+//nueva funcion para consultar todos los usuarios de la base
+server.get('/api/usuarios/getAllUsers', rutasProtegidas, (request, response)=>{
+        if (request.body.requestedBy == "ADMIN"){
+            return usuarios.obtenerTodosLosUsuarios(request.body.requestedBy)
+            .then(function (usuarios) {
+                if (usuarios) {
+                    response.send(usuarios);
+                } else {
+                    response.status(400).send('No existe el Nickname ingresado');
+                }
+            });
+        }else{
+            response.status(400).send('No tiene permisos para consultar el usuario');
+        }
 })
 
 
 //ENDPOINT DE PLATOS
 const platos = require("./modulos/platos.js");
 
-server.get('/api/modulos/platos/obtenerPlatos', (request, response) => {
+server.get('/api/platos/obtenerPlatos', (request, response) => {
     return platos.obtenerPlatos()
     .then(function (platos) {
         if (platos) {
@@ -173,12 +206,97 @@ server.get('/api/modulos/platos/obtenerPlatos', (request, response) => {
 })
 
 
+server.post('/api/platos/add', rutasProtegidas, function (request, response) {
+    return usuarios.obtenerPorNickname(request.body.requestedBy)
+    .then(function (usuarios) {
+        if (usuarios){
+            if (usuarios.toJSON().role==1){
+                return platos.agregarPlato(request)
+                .then(function (platos) {
+                    if (platos) {
+                        response.send(platos);
+                    } else {
+                        response.status(400).send('Error agregando un nuevo plato.');
+                    }
+                })
+                .catch(err=>response.status(400).send(err.parent.sqlMessage));  
+            }else{
+                response.status(400).send('El usuario ' + request.body.requestedBy + ' no posee rol de administrador');
+            }
+        }else{
+            response.status(400).send('No existe el usuario ' + request.body.requestedBy);
+        }
+    });       
+        
+});
+
+server.put('/api/platos/update/:id', rutasProtegidas, function (request, response) {
+    return usuarios.obtenerPorNickname(request.body.requestedBy)
+    .then(function (usuarios) {
+        if (usuarios){
+            if (usuarios.toJSON().role==1){
+                return platos.actualizarPlato(request)
+                .then(function (platos) {
+                    if (platos) {
+                        response.status(200).send('El plato ' + request.params.id + ' ha sido actualizado con éxito')
+                    } else {
+                        response.status(400).send('Error actualizando');
+                    }
+                })    
+                .catch(err=>response.status(400).send(err.parent.sqlMessage));  
+            }else{
+                response.status(400).send('El usuario ' + request.body.requestedBy + ' no posee rol de administrador');
+            }
+        }else{
+            response.status(400).send('No existe el usuario ' + request.body.requestedBy);
+        }
+    });       
+        
+});
+
+server.delete('/api/platos/delete/:id', rutasProtegidas, function (request, response) {
+    return usuarios.obtenerPorNickname(request.body.requestedBy)
+    .then(function (usuarios) {
+        if (usuarios){
+            if (usuarios.toJSON().role==1){
+                return platos.borrarPlato(request)
+                .then(function (platos) {
+                    if (platos) {
+                        response.status(200).send('El plato ' + request.params.id + ' ha sido eliminado con éxito')
+                    } else {
+                        response.status(400).send('Error eliminando el plato');
+                    }
+                })    
+                .catch(err=>response.status(400).send(err.parent.sqlMessage));  
+            }else{
+                response.status(400).send('El usuario ' + request.body.requestedBy + ' no posee rol de administrador');
+            }
+        }else{
+            response.status(400).send('No existe el usuario ' + request.body.requestedBy);
+        }
+    });       
+        
+});
+
+
+server.get('/api/platos/getById/:id', rutasProtegidas, (request, response)=>{
+    return platos.obtenerPorId(request)
+    .then(function (platos) {
+        if (platos) {
+            response.send(platos);
+        } else {
+            response.status(400).send('Error');
+        }
+    });
+})
+
+
 //ENDPOINT DE ORDENES
 
 const ordenes = require("./modulos/ordenes.js");
 const ordenes_platos = require("./modulos/ordenes_platos.js"); //tabla intermedia de cantidades
 
-//ojo con esta seccion revisar los nombres!!
+
 
 //sección para agregar un pedido
 server.post('/api/order/add', rutasProtegidas, function (request, response) {
@@ -198,7 +316,6 @@ server.post('/api/order/add', rutasProtegidas, function (request, response) {
                     }
                 });   
             });
-        
         } else {
             response.status(400).send('Error agregando un nuevo plato. Vuelva a intentarlo');
         }
